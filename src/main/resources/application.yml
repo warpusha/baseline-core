@@ -1,0 +1,46 @@
+# Exposes management endpoints (/actuator/health, etc) over a separate port.
+management:
+  server:
+    port: 8301
+server:
+  port: 8302
+  compression.enabled: true
+
+# JPA
+spring:
+  jpa:
+    show-sql: false
+    hibernate.ddl-auto: validate
+    database: postgresql
+    # LobCreatorBuilderImpl : HHH000424: Disabling contextual LOB creation as createClob() method threw error
+    # see: http://vkuzel.blogspot.de/2016/03/spring-boot-jpa-hibernate-atomikos.html
+    # Disable feature detection by this undocumented parameter. Check the org.hibernate.engine.jdbc.internal.JdbcServiceImpl.configure method for more details.
+    properties:
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.jdbc.time_zone: UTC
+      hibernate.jdbc.batch_size: 30
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+    # Because detection is disabled you have itemDtoToItem set correct dialect by hand.
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/baseline
+    username: operations
+    password: operations
+    hikari.pool-name: SpringBootHikariCP
+    hikari.maximum-pool-size: 20
+    hikari.minimum-idle: 5
+    hikari.max-lifetime: 2000000
+    hikari.connection-timeout: 30000
+    hikari.idle-timeout: 30000
+
+  # Flyway
+  flyway:
+    table: baseline_flyway_schema_history
+    locations: classpath:db/migration/{vendor}
+    schemas: operations
+    url: jdbc:postgresql://localhost:5432/baseline
+    user: postgres
+    password: postgres
+    out-of-order: true
