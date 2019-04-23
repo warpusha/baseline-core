@@ -1,7 +1,7 @@
 package com.baseline.salescore.entity;
 
-import com.baseline.salescore.constants.Direction;
-import lombok.Data;
+import com.baseline.salescore.constant.Direction;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -9,18 +9,22 @@ import javax.persistence.*;
 @Table(name = "INVENTORY_DETAIL")
 @Data
 @SequenceGenerator(name = "SEQ_INVENTORY_DETAIL_ID", sequenceName = "SEQ_INVENTORY_DETAIL_ID", allocationSize = 1)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(exclude = {"item", "inventoryHeader"})
 public class InventoryDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INVENTORY_DETAIL_ID")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "INVENTORY_HDR_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "INVENTORY_HDR_ID", updatable = false)
     private InventoryHeader inventoryHeader;
 
-    @ManyToOne
-    @JoinColumn(name = "ITEM_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ITEM_ID", updatable = false)
     private Item item;
 
     private Integer quantity;

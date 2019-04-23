@@ -5,9 +5,8 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ItemDto {
+public class CompositionDto {
     private Long id;
-    private String description;
-    private Double unitCost;
-    private Integer stock;
+    private ItemDto item;
+    private Integer quantity;
 }

@@ -3,11 +3,16 @@ package com.baseline.salescore.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ItemDto {
+public class InventoryHeaderDto {
     private Long id;
+    private String type;
+    private LocalDateTime date;
     private String description;
-    private Double unitCost;
-    private Integer stock;
+    private List<InventoryDetailDto> inventoryDetails;
+
 }

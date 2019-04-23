@@ -80,7 +80,7 @@ alter table SALE_ITEM
 alter table INVENTORY_HEADER
     add constraint FK_SALE_ITEM_INVENTORY_HDR foreign key (SALE_ITEM_ID) references SALE_ITEM (ID);
 alter table INVENTORY_DETAIL
-    add constraint FK_INVENTORY_HDR_INVENTORY_DTL foreign key (INVENTORY_HDR_ID) references INVENTORY_DETAIL (ID);
+    add constraint FK_INVENTORY_HDR_INVENTORY_DTL foreign key (INVENTORY_HDR_ID) references INVENTORY_HEADER (ID);
 alter table INVENTORY_DETAIL
     add constraint FK_ITEM_INVENTORY_DTL foreign key (ITEM_ID) references ITEM (ID) on delete cascade;
 

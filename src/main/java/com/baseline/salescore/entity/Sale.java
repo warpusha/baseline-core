@@ -19,4 +19,8 @@ public class Sale {
     @OneToMany(mappedBy = "sale")
     private List<SaleItem> saleItems;
 
+    @PrePersist
+    public void setDate() {
+        date = Instant.now();
+    }
 }

@@ -1,4 +1,4 @@
-package com.baseline.salescore.constants;
+package com.baseline.salescore.constant;
 
 public enum Direction {
     IN,

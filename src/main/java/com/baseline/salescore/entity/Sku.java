@@ -1,14 +1,22 @@
 package com.baseline.salescore.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
 @Table(name = "SKU")
 @SequenceGenerator(name = "SEQ_SKU_ID", sequenceName = "SEQ_SKU_ID", allocationSize = 1)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Sku {
 
     @Id
@@ -16,6 +24,14 @@ public class Sku {
     private Long id;
     private String name;
     private String description;
-    @OneToMany(mappedBy = "sku", cascade = CascadeType.REMOVE)
-    private List<Composition> compositions;
+    private BigDecimal retailPrice;
+    @OneToMany(mappedBy = "sku", cascade = CascadeType.ALL)
+    private Set<Composition> compositions;
+
+    public Set<Composition> getCompositions() {
+        if (compositions == null) {
+            compositions = new HashSet<>();
+        }
+        return compositions;
+    }
 }
