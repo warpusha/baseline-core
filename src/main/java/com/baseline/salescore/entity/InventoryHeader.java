@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "INVENTORY_HEADER")
@@ -32,10 +32,10 @@ public class InventoryHeader {
     private String description;
 
     @OneToMany(mappedBy = "inventoryHeader", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<InventoryDetail> inventoryDetails;
+    private List<InventoryDetail> inventoryDetails;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SALE_ITEM_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "SALE_ITEM_ID", updatable = false)
     private SaleItem saleItem;
 
     @PrePersist

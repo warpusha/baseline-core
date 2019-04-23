@@ -15,6 +15,10 @@ import java.util.TimeZone;
 @Mapper(componentModel = "spring")
 public interface DtoMapper {
 
+    SaleDto saleToDto(Sale sale, @Context TimeZone timeZone);
+
+    SaleItemDto saleItemToDto(SaleItem saleItem);
+
     SkuDto skuToDto(Sku sku);
 
     List<SkuDto> skusToDto(List<Sku> sku);

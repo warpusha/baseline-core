@@ -1,6 +1,7 @@
 package com.baseline.salescore.service;
 
-import com.baseline.salescore.cache.StockCache;
+import com.baseline.salescore.cache.ItemStockCache;
+import com.baseline.salescore.cache.SkuStockCache;
 import com.baseline.salescore.constant.Direction;
 import com.baseline.salescore.constant.HeaderType;
 import com.baseline.salescore.converter.DtoMapper;
@@ -22,7 +23,8 @@ import java.util.Map;
 
 @Service
 public class InventoryService {
-    private StockCache stockCache;
+    private ItemStockCache itemStockCache;
+    private SkuStockCache skuStockCache;
     private ItemRepository itemRepository;
     private InventoryHdrRepository inventoryHdrRepository;
     private InventoryConverter inventoryConverter;
@@ -31,7 +33,7 @@ public class InventoryService {
 
     @Transactional
     public Map<Long, Integer> getStock() {
-        return stockCache.getStockCache();
+        return itemStockCache.getItemStockCache();
     }
 
     @Transactional
@@ -39,7 +41,8 @@ public class InventoryService {
         validateTransiton(stock);
         Item item = itemRepository.findById(stock.getItemId()).orElseThrow(() -> new ItemNotFoundException(stock.getItemId()));
         InventoryHeader header = inventoryHdrRepository.save(inventoryConverter.transitionToHeader(stock, item));
-        stockCache.updateCache(header);
+        itemStockCache.updateCache(header);
+        skuStockCache.fillCache();
         return mapper.headerToDto(header, now.getTimeZone());
     }
 
@@ -78,7 +81,12 @@ public class InventoryService {
     }
 
     @Autowired
-    public void setStockCache(StockCache stockCache) {
-        this.stockCache = stockCache;
+    public void setItemStockCache(ItemStockCache itemStockCache) {
+        this.itemStockCache = itemStockCache;
+    }
+
+    @Autowired
+    public void setSkuStockCache(SkuStockCache skuStockCache) {
+        this.skuStockCache = skuStockCache;
     }
 }

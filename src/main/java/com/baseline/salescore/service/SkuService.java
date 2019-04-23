@@ -1,5 +1,6 @@
 package com.baseline.salescore.service;
 
+import com.baseline.salescore.cache.SkuStockCache;
 import com.baseline.salescore.converter.DtoMapper;
 import com.baseline.salescore.dto.CompositionDto;
 import com.baseline.salescore.dto.SkuDto;
@@ -25,22 +26,17 @@ import java.util.stream.Collectors;
 public class SkuService {
 
     private SkuRepository skuRepository;
+    private SkuStockCache skuStockCache;
     private ItemRepository itemRepository;
     private DtoMapper dtoMapper;
-
-//    public SkuDto createSku(String name, String description, Map<Item, Integer> composition) {
-//        Sku sku = Sku.builder().name(name).description(description).build();
-//        List<Composition> compositions = new ArrayList<>();
-//        composition.forEach((item, quantity) -> {
-//            compositions.add(Composition.builder().item(item).quantity(quantity).sku(sku).build());
-//        });
-//        sku.setCompositions(compositions);
-//        return dtoMapper.skuToDto(skuRepository.save(sku));
-//    }
 
     @Transactional
     public List<SkuDto> getAll() {
         return dtoMapper.skusToDto(skuRepository.findAll());
+    }
+
+    public Map<Long, Integer> getStock() {
+        return skuStockCache.getSkuStockCache();
     }
 
     @Transactional
@@ -54,7 +50,9 @@ public class SkuService {
             Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException(itemId));
             sku.getCompositions().add(Composition.builder().item(item).quantity(quantity).sku(sku).build());
         });
-        return dtoMapper.skuToDto(skuRepository.save(sku));
+        SkuDto skuDto = dtoMapper.skuToDto(skuRepository.save(sku));
+        skuStockCache.fillCache();
+        return skuDto;
     }
 
     private void validateSkuRequest(SkuDto request) {
@@ -83,5 +81,10 @@ public class SkuService {
     @Autowired
     public void setItemRepository(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
+    }
+
+    @Autowired
+    public void setSkuStockCache(SkuStockCache skuStockCache) {
+        this.skuStockCache = skuStockCache;
     }
 }

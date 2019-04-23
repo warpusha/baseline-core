@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"item", "inventoryHeader"})
+@EqualsAndHashCode(exclude = {"inventoryHeader"})
 public class InventoryDetail {
 
     @Id
@@ -23,7 +23,7 @@ public class InventoryDetail {
     @JoinColumn(name = "INVENTORY_HDR_ID", updatable = false)
     private InventoryHeader inventoryHeader;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ITEM_ID", updatable = false)
     private Item item;
 

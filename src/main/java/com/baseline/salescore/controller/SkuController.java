@@ -27,6 +27,11 @@ public class SkuController {
         return ResponseDto.ok(skuService.getAll());
     }
 
+    @GetMapping("/sku/stock")
+    public ResponseDto getStock() {
+        return ResponseDto.ok(skuService.getStock());
+    }
+
     @Autowired
     public void setSkuService(SkuService skuService) {
         this.skuService = skuService;

@@ -26,8 +26,9 @@ create table COMPOSITION
 
 create table SALE
 (
-    ID   bigint    not null,
-    DATE timestamp not null,
+    ID          bigint       not null,
+    DATE        timestamp    not null,
+    CUSTOMER_ID varchar(255) not null,
     PRIMARY KEY (ID)
 );
 

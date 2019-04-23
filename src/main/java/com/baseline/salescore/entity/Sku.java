@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -25,7 +26,8 @@ public class Sku {
     private String name;
     private String description;
     private BigDecimal retailPrice;
-    @OneToMany(mappedBy = "sku", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sku", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @BatchSize(size = 20)
     private Set<Composition> compositions;
 
     public Set<Composition> getCompositions() {
